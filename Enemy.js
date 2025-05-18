@@ -53,7 +53,7 @@ class Enemy extends ex.Actor {
                 this.direction = "up"
             }
 
-            if (distance <= 300 && !this.changeStarted) {
+            if (distance <= 300 && !this.changeStarted && !this.hasStartedFollowing) {
                 this.changeStarted = true
 
                 setTimeout(() => {
@@ -70,12 +70,12 @@ class Enemy extends ex.Actor {
                         color: ex.Color.Red
                     }))
                     setTimeout(() => {
-                        this.actions.meet(this.target, 300)
+                        this.actions.follow(this.target, 200)
                         this.hasStartedFollowing = true
                     }, 1000)
                 }, 2000)
             }
-            if (distance <= 200) {
+            if (distance <= 200 && !this.hasStartedFollowing) {
                 setTimeout(() => {
                     this.graphics.use(new ex.Rectangle({
                         height: 32,
@@ -84,7 +84,7 @@ class Enemy extends ex.Actor {
                     }))
                 }, 0)
                 setTimeout(() => {
-                    this.actions.meet(this.target, Math.floor(Math.random() * (300 - 150 + 1)) + 150)
+                    this.actions.follow(this.target, 200)
                     this.hasStartedFollowing = true
                 }, 1000)
             }
@@ -127,7 +127,7 @@ class Enemy extends ex.Actor {
                     }))
                 }, 200)
                 if (!this.hasStartedFollowing) {
-                    this.actions.meet(this.target, Math.floor(Math.random() * (300 - 150 + 1)) + 150)
+                    this.actions.follow(this.target, 200)
                     this.hasStartedFollowing = true
                 }
             }

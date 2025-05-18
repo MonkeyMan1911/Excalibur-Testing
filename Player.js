@@ -27,6 +27,7 @@ class Player extends ex.Actor {
 
         this.fireCooldown = 0
         this.health = 5
+        this.speed = 200
 
         this.name = "Player"
     }
@@ -52,7 +53,7 @@ class Player extends ex.Actor {
             this.playerLabel.text = String(this.health)
             if (engine.input.keyboard.isHeld(ex.Keys.Right)) {
                 if (this.canMove.right) {
-                    this.pos.x += 5;
+                    this.vel.x = this.speed
                     this.graphics.use(this.rightAnimation)
                     moving = true
                 }
@@ -60,7 +61,7 @@ class Player extends ex.Actor {
             }
             else if (engine.input.keyboard.isHeld(ex.Keys.Left)) {
                 if (this.canMove.left) {
-                    this.pos.x -= 5;
+                    this.vel.x = -this.speed
                     this.graphics.use(this.leftAnimation)
                     moving = true
                 }
@@ -68,7 +69,7 @@ class Player extends ex.Actor {
             }
             else if (engine.input.keyboard.isHeld(ex.Keys.Up)) {
                 if (this.canMove.up) {
-                    this.pos.y -= 5;
+                    this.vel.y = -this.speed
                     this.graphics.use(this.upAnimation)
                     moving = true
                 }
@@ -76,13 +77,22 @@ class Player extends ex.Actor {
             }
             else if (engine.input.keyboard.isHeld(ex.Keys.Down)) {
                 if (this.canMove.down) {
-                    this.pos.y += 5;
+                    this.vel.y = this.speed
                     this.graphics.use(this.downAnimation)
                     moving = true
                 }
                 this.direction = "down"
-            }      
+            }   
             
+            if (!engine.input.keyboard.isHeld(ex.Keys.Left) && !engine.input.keyboard.isHeld(ex.Keys.Right)) {
+                this.vel.x = 0
+                moving = false
+            } 
+            if (!engine.input.keyboard.isHeld(ex.Keys.Up) && !engine.input.keyboard.isHeld(ex.Keys.Down)) {
+                this.vel.y = 0
+                moving = false
+            } 
+
             if (!moving) {
                 this.graphics.use(this.idleSprites[this.direction])
             }
