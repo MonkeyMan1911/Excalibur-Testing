@@ -1,0 +1,14 @@
+import { Entity } from '../../EntityComponentSystem';
+import { Action } from '../Action';
+/**
+ * Action that can run multiple {@apilink Action}s or {@apilink ActionSequence}s at the same time
+ */
+export declare class ParallelActions implements Action {
+    id: number;
+    private _actions;
+    constructor(parallelActions: Action[]);
+    update(elapsed: number): void;
+    isComplete(entity: Entity): boolean;
+    reset(): void;
+    stop(): void;
+}

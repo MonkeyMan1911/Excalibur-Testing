@@ -1,0 +1,19 @@
+import { Vector } from '../Math/vector';
+import { Raster, RasterOptions } from './Raster';
+export interface PolygonOptions {
+    points: Vector[];
+}
+/**
+ * A polygon {@apilink Graphic} for drawing arbitrary polygons to the {@apilink ExcaliburGraphicsContext}
+ *
+ * Polygons default to {@apilink ImageFiltering.Blended}
+ */
+export declare class Polygon extends Raster {
+    private _points;
+    get points(): Vector[];
+    set points(points: Vector[]);
+    get minPoint(): Vector;
+    constructor(options: RasterOptions & PolygonOptions);
+    clone(): Polygon;
+    execute(ctx: CanvasRenderingContext2D): void;
+}

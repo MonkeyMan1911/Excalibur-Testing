@@ -1,0 +1,13 @@
+import { Raster, RasterOptions } from './Raster';
+export interface RectangleOptions {
+    width: number;
+    height: number;
+}
+/**
+ * A Rectangle {@apilink Graphic} for drawing rectangles to the {@apilink ExcaliburGraphicsContext}
+ */
+export declare class Rectangle extends Raster {
+    constructor(options: RasterOptions & RectangleOptions);
+    clone(): Rectangle;
+    execute(ctx: CanvasRenderingContext2D): void;
+}
