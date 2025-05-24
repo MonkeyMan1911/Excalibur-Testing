@@ -70,7 +70,7 @@ class Enemy extends ex.Actor {
                         color: ex.Color.Red
                     }))
                     setTimeout(() => {
-                        this.actions.follow(this.target, 200)
+                        this.actions.follow(this.target, 100)
                         this.hasStartedFollowing = true
                     }, 1000)
                 }, 2000)
@@ -84,7 +84,7 @@ class Enemy extends ex.Actor {
                     }))
                 }, 0)
                 setTimeout(() => {
-                    this.actions.follow(this.target, 200)
+                    this.actions.follow(this.target, 100)
                     this.hasStartedFollowing = true
                 }, 1000)
             }
@@ -127,7 +127,7 @@ class Enemy extends ex.Actor {
                     }))
                 }, 200)
                 if (!this.hasStartedFollowing) {
-                    this.actions.follow(this.target, 200)
+                    this.actions.follow(this.target, 100)
                     this.hasStartedFollowing = true
                 }
             }

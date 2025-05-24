@@ -57,6 +57,9 @@ class Bullet extends ex.Actor {
             if (this.name === "PlayerBullet" && event.other.owner.name !== "Player") {
                 this.kill()
             }
+            if (this.name === "EnemyBullet" && event.other.owner.name !== "Enemy") {
+                this.kill()
+            }
             if (this.name.includes("Bullet") && event.other.owner.name.includes("Bullet")) {
                 this.kill()
             }

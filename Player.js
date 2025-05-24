@@ -54,42 +54,59 @@ class Player extends ex.Actor {
             if (engine.input.keyboard.isHeld(ex.Keys.Right)) {
                 if (this.canMove.right) {
                     this.vel.x = this.speed
+                    this.vel.y = 0
                     this.graphics.use(this.rightAnimation)
                     moving = true
+                }
+                else {
+                    this.vel.x = 0
                 }
                 this.direction = "right"
             }
             else if (engine.input.keyboard.isHeld(ex.Keys.Left)) {
                 if (this.canMove.left) {
                     this.vel.x = -this.speed
+                    this.vel.y = 0
                     this.graphics.use(this.leftAnimation)
                     moving = true
+                }
+                else {
+                    this.vel.x = 0
                 }
                 this.direction = "left"
             }
             else if (engine.input.keyboard.isHeld(ex.Keys.Up)) {
                 if (this.canMove.up) {
                     this.vel.y = -this.speed
+                    this.vel.x = 0
                     this.graphics.use(this.upAnimation)
                     moving = true
+                }
+                else {
+                    this.vel.y = 0
                 }
                 this.direction = "up"
             }
             else if (engine.input.keyboard.isHeld(ex.Keys.Down)) {
                 if (this.canMove.down) {
                     this.vel.y = this.speed
+                    this.vel.x = 0
                     this.graphics.use(this.downAnimation)
                     moving = true
+                }
+                else {
+                    this.vel.y = 0
                 }
                 this.direction = "down"
             }   
             
-            if (!engine.input.keyboard.isHeld(ex.Keys.Left) && !engine.input.keyboard.isHeld(ex.Keys.Right)) {
-                this.vel.x = 0
-                moving = false
-            } 
-            if (!engine.input.keyboard.isHeld(ex.Keys.Up) && !engine.input.keyboard.isHeld(ex.Keys.Down)) {
+            if (!engine.input.keyboard.isHeld(ex.Keys.Up) && 
+                !engine.input.keyboard.isHeld(ex.Keys.Down) &&
+                !engine.input.keyboard.isHeld(ex.Keys.Left) && 
+                !engine.input.keyboard.isHeld(ex.Keys.Right)) {
+
                 this.vel.y = 0
+                this.vel.x = 0
                 moving = false
             } 
 
