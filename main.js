@@ -33,27 +33,46 @@ testBox.on('initialize', () => {
     testBox.actions.rotateTo(Math.PI / 2, Math.PI, ex.RotationType.Clockwise)
 })
 
-const player = new Player(playerSpriteSheet)
+let player = new Player(playerSpriteSheet)
 const enemy = new Enemy("Enemy", 3, player)
 
 game.currentScene.camera.strategy.lockToActor(player);
 
-
 game.input.gamepads.enabled = true;
 
-game.input.gamepads.on('connect', (ce) => {
-  const pad = ce.gamepad;
-  pad.on('button', (be) => {
-    if (be.button === ex.Buttons.Face1) {
-      console.log("A button pressed");
-    }
-  });
-  pad.on('axis', (ae) => {
-    if (ae.axis === ex.Axes.LeftStickX && ae.value > 0.5) {
-      console.log("Moving right!");
-    }
-  });
-});
+// game.input.gamepads.on('connect', (ce) => {
+//   const pad = ce.gamepad;
+//   // pad.on('button', (be) => {
+//   //   if (be.button === ex.Buttons.Face1) {
+//   //     console.log("A button pressed");
+//   //   }
+//   // });
+//   pad.on('axis', (ae) => {
+//     if (ae.value > 0.5 || ae.value < -0.5) {
+//       console.log(ae.value);  
+//     }
+//   });
+// });
+
+// game.input.gamepads.on("axis", (ae) => {
+//     if (ae.value > 0.5 || ae.value < -0.5) {
+//       console.log(ae.value);  
+//       player.rightHeld = true
+//     }
+// })
+
+// game.on("preupdate", () => {
+//   console.log(game.input.gamepads.at(3).getAxes(ex.Axes.LeftStickX))
+//   // game.input.gamepads.on("axis", (ae) => {
+//   //   if (ae.value > 0.5 || ae.value < -0.5) {
+//   //     console.log(ae.value);  
+//   //     player.rightHeld = true
+//   //   }
+//   //   ex.Logger.getInstance().info(ae.axis, ae.value);
+//   // })
+// })
+
+console.log(game.input.gamepads)
 
 game.add(testBox)
 game.add(enemy)

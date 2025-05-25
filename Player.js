@@ -47,11 +47,38 @@ class Player extends ex.Actor {
         });
         engine.add(this.playerLabel)
 
+        document.body.requestPointerLock()
+
         this.on('preupdate', () => {
             let moving = false
             this.playerLabel.pos = ex.vec(this.pos.x - 10, this.pos.y + 40);
             this.playerLabel.text = String(this.health)
-            if (engine.input.keyboard.isHeld(ex.Keys.Right)) {
+
+            const gamepad = engine.input.gamepads.at(1);
+            const leftX = gamepad?.getAxes(ex.Axes.LeftStickX) ?? 0;
+            const leftY = gamepad?.getAxes(ex.Axes.LeftStickY) ?? 0;
+            const rightX = gamepad?.getAxes(ex.Axes.RightStickX) ?? 0;
+            const rightY = gamepad?.getAxes(ex.Axes.RightStickY) ?? 0;
+
+            const rightHeld = engine.input.keyboard.isHeld(ex.Keys.Right) || leftX > 0.5;
+            const leftHeld  = engine.input.keyboard.isHeld(ex.Keys.Left)  || leftX < -0.5;
+            const upHeld    = engine.input.keyboard.isHeld(ex.Keys.Up)    || leftY < -0.5;
+            const downHeld  = engine.input.keyboard.isHeld(ex.Keys.Down)  || leftY > 0.5;
+            
+            if (rightX > 0.5) {
+                this.direction = "right"
+            }
+            if (rightX < -0.5) {
+                this.direction = "left"
+            }
+            if (rightY > 0.5) {
+                this.direction = "down"
+            }
+            if (rightY < -0.5) {
+                this.direction = "up"
+            }
+
+            if (rightHeld) {
                 if (this.canMove.right) {
                     this.vel.x = this.speed
                     this.vel.y = 0
@@ -63,7 +90,7 @@ class Player extends ex.Actor {
                 }
                 this.direction = "right"
             }
-            else if (engine.input.keyboard.isHeld(ex.Keys.Left)) {
+            else if (leftHeld) {
                 if (this.canMove.left) {
                     this.vel.x = -this.speed
                     this.vel.y = 0
@@ -75,7 +102,7 @@ class Player extends ex.Actor {
                 }
                 this.direction = "left"
             }
-            else if (engine.input.keyboard.isHeld(ex.Keys.Up)) {
+            else if (upHeld) {
                 if (this.canMove.up) {
                     this.vel.y = -this.speed
                     this.vel.x = 0
@@ -87,7 +114,7 @@ class Player extends ex.Actor {
                 }
                 this.direction = "up"
             }
-            else if (engine.input.keyboard.isHeld(ex.Keys.Down)) {
+            else if (downHeld) {
                 if (this.canMove.down) {
                     this.vel.y = this.speed
                     this.vel.x = 0
@@ -100,11 +127,7 @@ class Player extends ex.Actor {
                 this.direction = "down"
             }   
             
-            if (!engine.input.keyboard.isHeld(ex.Keys.Up) && 
-                !engine.input.keyboard.isHeld(ex.Keys.Down) &&
-                !engine.input.keyboard.isHeld(ex.Keys.Left) && 
-                !engine.input.keyboard.isHeld(ex.Keys.Right)) {
-
+            if (!upHeld && !downHeld && !leftHeld && !rightHeld) {
                 this.vel.y = 0
                 this.vel.x = 0
                 moving = false
@@ -113,13 +136,23 @@ class Player extends ex.Actor {
             if (!moving) {
                 this.graphics.use(this.idleSprites[this.direction])
             }
-
-            if (engine.input.keyboard.isHeld(ex.Keys.Space) && this.fireCooldown === 0 ) {
-                const bullet = new Bullet(this, "PlayerBullet", 5)
-                engine.add(bullet)
-                this.fireCooldown = 2
-                setTimeout(() => {this.fireCooldown = 0}, this.fireCooldown * 1000)
+            if (moving) {
+                document.body.requestPointerLock()
             }
+
+            engine.input.keyboard.on('down', (evt) => {
+                if (evt.key === ex.Keys.Space) {
+                }
+            });
+            engine.input.keyboard.on('up', (evt) => {
+                if (evt.key === ex.Keys.Space && this.fireCooldown === 0 ) {
+                    const bullet = new Bullet(this, "PlayerBullet", 5)
+                    engine.add(bullet)
+                    this.fireCooldown = 2
+                    setTimeout(() => {this.fireCooldown = 0}, this.fireCooldown * 1000)
+                }
+            });
+
         })
         this.on('collisionstart', (event) => {
             const collisionCoords = event.contact.normal

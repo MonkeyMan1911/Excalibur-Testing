@@ -15,6 +15,19 @@ class Enemy extends ex.Actor {
         this.name = name
         this.target = target
 
+        this.patrol = [
+            {direction: "left", distance: 200, wait: 3},
+            {direction: "up", distance: 200, wait: 3},
+            {direction: "right", distance: 200, wait: 2},
+            {direction: "down", distance: 200, wait: 1}
+        ]
+        this.currentPatrol = 0
+        this.isPatrolling = true;
+        this.waiting = false;
+        this.targetX = null;
+        this.targetY = null
+        this.speed = 100;
+
         this.fireCooldown = 0
     }
 
@@ -39,6 +52,49 @@ class Enemy extends ex.Actor {
 
             const distance = this.pos.distance(this.target.pos);
             const direction = this.target.pos.sub(this.pos).normalize();
+
+            const patrol = this.patrol[this.currentPatrol]
+            // Patrol
+           if (!this.hasStartedFollowing && this.isPatrolling && !this.waiting) {
+                // Start patrol if not already heading to target
+                if (this.targetX === null && this.targetY === null) {
+                    if (patrol.direction === "right") {
+                        this.targetX = this.pos.x + patrol.distance;
+                        this.vel.x = this.speed;
+                    } 
+                    if (patrol.direction === "left") {
+                        this.targetX = this.pos.x - patrol.distance;
+                        this.vel.x = -this.speed;
+                    }
+                    if (patrol.direction === "up") {
+                        this.targetY = this.pos.y - patrol.distance
+                        this.vel.y = -this.speed
+                    }
+                    if (patrol.direction === "down") {
+                        this.targetY = this.pos.y + patrol.distance
+                        this.vel.y = this.speed
+                    }
+                }
+
+                // Check if reached target
+                if ((this.vel.x > 0 && this.pos.x >= this.targetX) ||
+                    (this.vel.x < 0 && this.pos.x <= this.targetX) ||
+                    (this.vel.y < 0 && this.pos.y <= this.targetY) ||
+                    (this.vel.y > 0 && this.pos.y >= this.targetY)) {
+
+                    this.vel.x = 0;
+                    this.targetX = null;
+                    this.vel.y = 0
+                    this.targetY = null
+                    this.waiting = true;
+
+                    // Wait then go to next patrol point
+                    setTimeout(() => {
+                        this.currentPatrol = (this.currentPatrol + 1) % this.patrol.length;
+                        this.waiting = false;
+                    }, patrol.wait * 1000);
+                }
+            }
 
             if (Math.round(direction.x) === -1) {
                 this.direction = "left"
